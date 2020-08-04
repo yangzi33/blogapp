@@ -1,3 +1,4 @@
+
 """
 Django settings for django_blog project.
 
