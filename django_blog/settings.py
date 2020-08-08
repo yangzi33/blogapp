@@ -26,7 +26,7 @@ SECRET_KEY = 'gxs2m#+6c@oxg46e1)(hl*k1o(g96=75jiid8gbb9smhq9rb5@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['yangzi33-blog-app.herokuapp.com']
 
 
 # Application definition
