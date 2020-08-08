@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from .models import Profile
 
 
-# post_save: signam
+# post_save: signal
 # User: sender
 # receiver : receiver
 

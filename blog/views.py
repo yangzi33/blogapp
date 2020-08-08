@@ -25,13 +25,26 @@ class PostListView(ListView):
 
 
 class PostDetailView(DetailView):
-    """ With respect to template blog/post_list.html
+    """ With respect to template blog/post/<int:pk>.html
     """
     model = Post
     
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     """ With respect to template blog/post_list.html
+    """
+    model = Post
+    fields = ['title', 'content']
+
+    def form_valid(self, form):
+        """To prevent NOT NULL contraint of author_id
+        """
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    """ Post editing view
     """
     model = Post
     fields = ['title', 'content']
@@ -49,30 +62,18 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return self.request.user == post.author
 
 
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """ Post editing view
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    """ Post deleting view
     """
     model = Post
-    fields = ['title', 'content']
+    # Homepage redirect
+    success_url = '/'
 
-    def form_valid(self, form):
-        """To prevent NOT NULL contraint of author_id
+    def test_func(self):
+        """Check if the user is the author of the post
         """
-        form.instance.author = self.request.user
-        return super().form_valid(form)
-
-
-class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """ Post editing view
-    """
-    model = Post
-    fields = ['title', 'content']
-
-    def form_valid(self, form):
-        """To prevent NOT NULL contraint of author_id
-        """
-        form.instance.author = self.request.user
-        return super().form_valid(form)
+        post = self.get_object()
+        return self.request.user == post.author
 
 
 def about(request):
